@@ -4,13 +4,18 @@ import torch
 from transformers import pipeline
 
 
-def back_translation(texts: List, labels: List, srs: str = 'en', tgt: str = 'ru', batch_size: int = 20) -> Tuple[List, List]:
+def back_translation(
+    texts: List,
+    labels: List,
+    src: str = 'en',
+    tgt: str = 'ru',
+    batch_size: int = 20) -> Tuple[List, List]:
     """Аументация методом обратного перевода.
 
     Args:
         texts (List): Список текстов для аугментации.
         labels (List): Список меток текстов.
-        srs (str): Язык с такого переводить (язык текстов для аугментации).
+        src (str): Язык с такого переводить (язык текстов для аугментации).
         tgt (str): Язык, на который переводить.
         batch_size (int): Размер батча.
 
@@ -20,11 +25,11 @@ def back_translation(texts: List, labels: List, srs: str = 'en', tgt: str = 'ru'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
     if torch.cuda.is_available():
-        translator = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{srs}-{tgt}', device=0)
-        translator_back = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{tgt}-{srs}', device=0)
+        translator = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{src}-{tgt}', device=0)
+        translator_back = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{tgt}-{src}', device=0)
     else:
-        translator = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{srs}-{tgt}')
-        translator_back = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{tgt}-{srs}')
+        translator = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{src}-{tgt}')
+        translator_back = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{tgt}-{src}')
 
     new_texts, new_labels = [], []
     for step in tqdm.notebook.trange(0, len(texts), batch_size, desc='back_translation'):
