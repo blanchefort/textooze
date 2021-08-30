@@ -20,6 +20,7 @@ def contextual_replacer(texts: List, labels: List, top_k: int, model_name: str =
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
     if torch.cuda.is_available():
+        torch.cuda.empty_cache()
         fill_mask = pipeline('fill-mask', model=model_name, device=0)
     else:
         fill_mask = pipeline('fill-mask', model=model_name)

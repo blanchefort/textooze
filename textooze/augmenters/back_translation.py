@@ -25,6 +25,7 @@ def back_translation(
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     device = torch.device(device)
     if torch.cuda.is_available():
+        torch.cuda.empty_cache()
         translator = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{src}-{tgt}', device=0)
         translator_back = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{tgt}-{src}', device=0)
     else:
