@@ -36,8 +36,8 @@ def back_translation(
     for step in tqdm.notebook.trange(0, len(texts), batch_size, desc='back_translation'):
         transstep = False
         try:
-            transleted = [t['translation_text'] for t in translator(texts[step:step+batch_size], max_length=460)]
-            back = [t['translation_text'] for t in translator_back(transleted, max_length=460)]
+            transleted = [t['translation_text'] for t in translator(texts[step:step+batch_size], truncation='only_first')]
+            back = [t['translation_text'] for t in translator_back(transleted, truncation='only_first')]
             transstep = True
         except:
             continue
