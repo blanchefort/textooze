@@ -1,6 +1,8 @@
+"""Аугментация методом перефразировки."""
 from typing import List, Tuple
-import tqdm
+
 import torch
+import tqdm
 from transformers import PegasusForConditionalGeneration, PegasusTokenizer
 
 
@@ -10,14 +12,16 @@ def paraphraser(
     num_beams: int = 10,
     num_return_sequences: int = 3,
     max_length: int = 60,
-    model_name: str = 'tuner007/pegasus_paraphrase') -> Tuple[List, List]:
+    model_name: str = 'tuner007/pegasus_paraphrase') \
+        -> Tuple[List, List]:
     """парафразер Pegasus.
 
     Args:
         texts (List): Тексты для перефразировки.
         labels (List): Метки текстов.
         num_beams (int, optional): Количество лучей для генерации новой последовательности. Defaults to 10.
-        num_return_sequences (int, optional): Количество новых текстов, которое необходимо сгенерировать для каждого сэмпла. Defaults to 3.
+        num_return_sequences (int, optional): Количество новых текстов, которое необходимо
+        сгенерировать для каждого сэмпла. Defaults to 3.
         max_length (int, optional): Максимальна длина входящего и генерируемного текста (токенов). Defaults to 60.
         model_name (str, optional): Название модели в хабе transformers. Defaults to 'tuner007/pegasus_paraphrase'.
 
@@ -34,7 +38,7 @@ def paraphraser(
         model = PegasusForConditionalGeneration.from_pretrained(model_name)
 
     new_texts, new_labels = [], []
-    for text, label in tqdm.notebook.tqdm(zip(texts, labels), total=len(texts), desc='paraphraser'):
+    for text, label in tqdm.tqdm(zip(texts, labels), total=len(texts), desc='paraphraser'):
         tokenized_data = tokenizer(
             [text],
             truncation=True,

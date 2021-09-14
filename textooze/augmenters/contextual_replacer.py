@@ -1,11 +1,18 @@
-from typing import List, Tuple
+"""Аугментация методом контекстной замены случайного токена."""
 import random
-import tqdm
+from typing import List, Tuple
+
 import torch
-from transformers import pipeline, BertTokenizerFast
+import tqdm
+from transformers import BertTokenizerFast, pipeline
 
 
-def contextual_replacer(texts: List, labels: List, top_k: int, model_name: str = 'bert-base-uncased') -> Tuple[List, List]:
+def contextual_replacer(
+    texts: List,
+    labels: List,
+    top_k: int,
+    model_name: str = 'bert-base-uncased') \
+        -> Tuple[List, List]:
     """Контекстная замена одного случайного токена.
 
     Args:
@@ -27,7 +34,7 @@ def contextual_replacer(texts: List, labels: List, top_k: int, model_name: str =
     tokenizer = BertTokenizerFast.from_pretrained(model_name)
 
     new_texts, new_labels = [], []
-    for text, label in tqdm.notebook.tqdm(zip(texts, labels), total=len(texts), desc='contextual_replacer'):
+    for text, label in tqdm.tqdm(zip(texts, labels), total=len(texts), desc='contextual_replacer'):
         tokens = tokenizer.tokenize(text)[:510]
         if len(tokens) < 2:
             continue

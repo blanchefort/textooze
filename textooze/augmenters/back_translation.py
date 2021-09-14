@@ -1,6 +1,8 @@
+"""Аугментация методом обратного перевода."""
 from typing import List, Tuple
-import tqdm
+
 import torch
+import tqdm
 from transformers import pipeline
 
 
@@ -9,7 +11,8 @@ def back_translation(
     labels: List,
     src: str = 'en',
     tgt: str = 'ru',
-    batch_size: int = 20) -> Tuple[List, List]:
+    batch_size: int = 20) \
+        -> Tuple[List, List]:
     """Аументация методом обратного перевода.
 
     Args:
@@ -33,17 +36,12 @@ def back_translation(
         translator_back = pipeline(task='translation', model=f'Helsinki-NLP/opus-mt-{tgt}-{src}')
 
     new_texts, new_labels = [], []
-    for step in tqdm.notebook.trange(0, len(texts), batch_size, desc='back_translation'):
-        transstep = False
-        try:
-            transleted = [t['translation_text'] for t in translator(texts[step:step+batch_size], truncation='only_first')]
-            back = [t['translation_text'] for t in translator_back(transleted, truncation='only_first')]
-            transstep = True
-        except:
-            continue
-        if transstep == True:
-            for t, b, l in zip(texts[step:step+batch_size], back, labels[step:step+batch_size]):
-                if t != b:
-                    new_texts.append(b)
-                    new_labels.append(l)
+    for step in tqdm.trange(0, len(texts), batch_size, desc='back_translation'):
+        transleted = [t['translation_text'] for t in translator(texts[step:step+batch_size], truncation='only_first')]
+        back = [t['translation_text'] for t in translator_back(transleted, truncation='only_first')]
+
+        for t, b, l in zip(texts[step:step+batch_size], back, labels[step:step+batch_size]):
+            if t != b:
+                new_texts.append(b)
+                new_labels.append(l)
     return new_texts, new_labels

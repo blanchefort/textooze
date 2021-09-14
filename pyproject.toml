@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "textooze"
+version = "0.1.0"
+description = "Text Augmentation"
+authors = ["Igor Shatalin <shatalin.ip@gmail.com>"]
+license = "MIT License"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+torch = "^1.9.0"
+transformers = "^4.10.2"
+nlpaug = "^1.1.7"
+sentencepiece = "^0.1.96"
+
+[tool.poetry.dev-dependencies]
+black = "^21.9b0"
+mypy = "^0.910"
+flake8 = "^3.9.2"
+isort = "^5.9.3"
+interrogate = "^1.5.0"
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
